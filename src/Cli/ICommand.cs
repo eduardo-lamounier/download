@@ -1,6 +1,6 @@
-using Downloader.Util;
+using Download.Util;
 
-namespace Downloader.Cli;
+namespace Download.Cli;
 
 public interface ICommand
 {

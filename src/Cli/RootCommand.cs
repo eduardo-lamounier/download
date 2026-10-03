@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using Downloader.Util;
+using Download.Util;
 
-namespace Downloader.Cli;
+namespace Download.Cli;
 
 public class RootCommand(string flag) : ICommand
 {

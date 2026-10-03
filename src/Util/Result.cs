@@ -1,4 +1,4 @@
-namespace Downloader.Util;
+namespace Download.Util;
 
 public class Result<T>
 {

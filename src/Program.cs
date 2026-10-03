@@ -1,7 +1,7 @@
-﻿using Downloader.Cli;
-using Downloader.Util;
+﻿using Download.Cli;
+using Download.Util;
 
-namespace Downloader;
+namespace Download;
 
 public class Program
 {
