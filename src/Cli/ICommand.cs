@@ -4,5 +4,5 @@ namespace Download.Cli;
 
 public interface ICommand
 {
-  public abstract Result Execute();
+  public abstract Task<Result> ExecuteAsync();
 }

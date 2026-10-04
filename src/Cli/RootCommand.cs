@@ -1,12 +1,12 @@
-using System.Diagnostics;
+using Download.Core;
 using Download.Util;
 
 namespace Download.Cli;
 
-public class RootCommand(string flag) : ICommand
+public class RootCommand : ICommand
 {
   const string HELP_MESSAGE = """
-    usage: downloader [ -h | --help ] [ -v | --version ] <command> [args]
+    usage: downloader [ -h | --help ] [ -v | --version ] [urls]
 
     NOTE: Commands still in development.
 
@@ -16,22 +16,38 @@ public class RootCommand(string flag) : ICommand
     """;
   const string VERSION = "1.0.0";
 
-  private bool ShowHelp = flag == "-h" || flag == "--help";
-  private bool ShowVersion = flag == "-v" || flag == "--version";
+  private bool ShowHelp;
+  private bool ShowVersion;
 
-  public Result Execute()
+  private string[] Urls = [];
+
+  public async Task<Result> ExecuteAsync()
   {
     if (ShowHelp)
     {
       Console.WriteLine(HELP_MESSAGE);
     }
-    else
+    else if (ShowVersion)
     {
       Console.WriteLine("downloader " + VERSION);
     }
-
-    Debug.Assert(ShowHelp || ShowVersion);
+    else
+    {
+      Downloader d = new(Urls);
+      return await d.DownloadAsync();
+    }
 
     return Result.Success();
+  }
+
+  public RootCommand(string[] parameters)
+  {
+    ShowHelp = parameters.Contains("-h") || parameters.Contains("--help");
+    ShowVersion = parameters.Contains("-v") || parameters.Contains("--version");
+
+    if (!ShowHelp && !ShowVersion)
+    {
+      Urls = parameters;
+    }
   }
 }

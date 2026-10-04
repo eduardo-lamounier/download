@@ -5,7 +5,7 @@ namespace Download;
 
 public class Program
 {
-  static void Main(string[] args)
+  static async Task Main(string[] args)
   {
     ICommand? command = null;
     Parse(args)
@@ -18,15 +18,16 @@ public class Program
         }
       );
 
-    command
-      ?.Execute()
-      .Match(
+    if (command is not null)
+    {
+      (await command.ExecuteAsync()).Match(
         inFailure: (Error err) =>
         {
           Console.WriteLine("ERROR: " + err.Message);
           Environment.ExitCode = 1;
         }
       );
+    }
   }
 
   static Result<ICommand> Parse(string[] args)
@@ -39,12 +40,7 @@ public class Program
     switch (args[0])
     {
       default:
-        if (args[0].Length < 2 || !args[0].StartsWith("--"))
-        {
-          return Result<ICommand>.Failure($"unknown command {args[0]}");
-        }
-
-        return Result<ICommand>.Success(new RootCommand(args[0]));
+        return Result<ICommand>.Success(new RootCommand(args));
     }
   }
 }
